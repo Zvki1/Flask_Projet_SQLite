@@ -7,6 +7,7 @@ import sqlite3
 
 app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
+DATABASE_PATH = 'database.db'
 
 # Fonction pour créer une clé "authentifie" dans la session utilisateur
 def est_authentifie():
@@ -40,8 +41,8 @@ def authentification():
     return render_template('formulaire_authentification.html', error=False)
 
 @app.route('/fiche_client/<int:post_id>')
-def Readfiche(post_id):
-    conn = sqlite3.connect('database.db')
+def read_fiche(post_id):
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
     data = cursor.fetchall()
@@ -50,8 +51,8 @@ def Readfiche(post_id):
     return render_template('read_data.html', data=data)
 
 @app.route('/consultation/')
-def ReadBDD():
-    conn = sqlite3.connect('database.db')
+def read_bdd():
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients;')
     data = cursor.fetchall()
@@ -68,7 +69,7 @@ def enregistrer_client():
     prenom = request.form['prenom']
 
     # Connexion à la base de données
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
 
     # Exécution de la requête SQL pour insérer un nouveau client
